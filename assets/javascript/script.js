@@ -1,4 +1,4 @@
-
+$(document).ready(function() {
 var correct = 0;
 var incorrect = 0;
 //reference "34-QuestionGame" classwork for q&a objects inside arrays. No idea how to work an image into it.
@@ -36,19 +36,50 @@ var i = 0
 
 function start() {
     //empty the button.
+    var userinput = false;
+    console.log("hello")
     i = 0;
-    $("#fillMeIn").empty();
+    $(".killMe").empty();
     //append the question.
-    $("#fillMeIn").append("<h1>" + mainArray[i].question + "</h1>");
+    $(".killMe").append("<h1>" + mainArray[i].question + "</h1>");
     //append all answers of the object's array. use second iterator with for loop inside this timed function.
     for (var j = 0; j < mainArray[i].answers.length; j++) {
-    $("#fillMeIn").append("<p>" + mainArray[i].answers[j] + "</p")
+    $(".killMe").append("<p>" + mainArray[i].answers[j] + "</p")
     }
     i++;
+    //how do i save key click event key to compare to correct answer? event.click?
+    
+    // $("p").on("click", function() {}) run if logic after this.
+    
+    //if event.click === mainArray[i].answers[mainArray[i.answerLocation]] {
+    //      userevent = true;
+    //      $(".killMe").empty();
+    //      $(".killMe").append(MY GIF FOR WIN);
+    //      correct ++
+
+    // }
+    
+    //if event.click !== mainArray[i].answers[mainArray[i.answerLocation]] {
+    //     userevent = true;
+    //      $(".killMe").empty();
+    //      $(".killMe").append("<h1>The correct answer was: " +mainArray[i].answers[mainArray[i.answerLocation]]+ "</h1>" )
+    //      $(".killMe").append(MY GIF FOR LOSS);
+    //      incorrect ++
+    // }
+    
+    //if 
+    //how do i capture interval to see if it reaches 00:00?
+    //interval === 0 {
+        //      $(".killMe").append("<h1>The correct answer was: " +mainArray[i].answers[mainArray[i.answerLocation]]+ "</h1>" )
+    // }
     
 }
+// setInterval(function, interval)
 //i want to use a setinterval to run start every 30 seconds
-$("button").on("click",start)
+$("button").on("click", start)
+});
+
+
 // I need a start button that initiates my timer. 
 //reference classwork "10-Stopwatch" and "08-SimpleTimer"
 //setTimeout(function(){ alert("Hello"); }, 3000);
