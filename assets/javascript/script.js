@@ -1,108 +1,135 @@
-$(document).ready(function() {
-var correct = 0;
-var incorrect = 0;
-let intervalId;
-let counter = 10;
-//reference "34-QuestionGame" classwork for q&a objects inside arrays. No idea how to work an image into it.
-var mainArray = [
-    {
-        question: "What kind of dog is the smallest?",
-        answers: ["Chihuahua", "Labrador Retriever", "Beagle", "Husky"],
-        //img here,
-        answerTruth: "Chihuahua"
-    },
-    {
-        question: "What is the largest type of dog?",
-        answers: ["Beagle", "Golden Retriever", "Great Pyranese", "Poodle"],
-        //img here,
-        answerTruth: "Great Pyranese"
-    },
-    {
-        question: "Which animal originated in Mexico?",
-        answers: ["Maltese", "Chihuahua", "Yorkie", "Great Dane"],
-        //img here,
-        answerTruth: "Chihuahua"
-    },
-    {
-        question: "Which is my favorite kind of dog?",
-        answers: ["Chihuahua", "Cat", "Turtle", "The correct answer is Chihuahua."],
-        //img here,
-        answerTruth: "Chihuahua"
-    }
-]
+$(document).ready(function () {
+    var correct = 0;
+    var incorrect = 0;
+    let intervalId;
+    let counter = 10;
+    //reference "34-QuestionGame" classwork for q&a objects inside arrays. No idea how to work an image into it.
+    var mainArray = [
+        {
+            question: "What kind of dog is the smallest?",
+            answers: ["Chihuahua", "Labrador Retriever", "Beagle", "Husky"],
+            //img here,
+            answerTruth: "Chihuahua"
+        },
+        {
+            question: "What is the largest type of dog?",
+            answers: ["Beagle", "Golden Retriever", "Great Pyranese", "Poodle"],
+            //img here,
+            answerTruth: "Great Pyranese"
+        },
+        {
+            question: "Which animal originated in Mexico?",
+            answers: ["Maltese", "Chihuahua", "Yorkie", "Great Dane"],
+            //img here,
+            answerTruth: "Chihuahua"
+        },
+        {
+            question: "Which is my favorite kind of dog?",
+            answers: ["Chihuahua", "Cat", "Turtle", "The correct answer is Chihuahua."],
+            //img here,
+            answerTruth: "Chihuahua"
+        },
+        {
+            question: "Which is my favorite kind of dog?",
+            answers: ["Chihuahua", "Cat", "Turtle", "The correct answer is Chihuahua."],
+            //img here,
+            answerTruth: "Chihuahua"
+        },
+        {
+            question: "Which is my favorite kind of dog?",
+            answers: ["Chihuahua", "Cat", "Turtle", "The correct answer is Chihuahua."],
+            //img here,
+            answerTruth: "Chihuahua"
+        },
+        {
+            question: "Which is my favorite kind of dog?",
+            answers: ["Chihuahua", "Cat", "Turtle", "The correct answer is Chihuahua."],
+            //img here,
+            answerTruth: "Chihuahua"
+        },
 
-//https://medium.com/@eric.stermer/setinterval-simply-put-is-a-timed-loop-652eb54bd5f8
-//brilliant explanation of for loops being just like setinterval
-var i = 0
+    ]
 
-function decrement() {
-    counter --;
-    $("#timer").empty()
-    $("#timer").html(counter)
-    if (counter === 0) {
-        counter = 10;
-        start();
-        clearInterval(intervalId);
-    }
-}
 
-function start() {
-    //empty the button.
-    var userinput = false;
-    
-    $(".killMe").empty();
-    //append the question.
-    $(".killMe").append("<h1>" + mainArray[i].question + "</h1>");
-    for (var j = 0; j < mainArray[i].answers.length; j++) {
-        $(".killMe").append("<p>" + mainArray[i].answers[j] + "</p")
+    //https://medium.com/@eric.stermer/setinterval-simply-put-is-a-timed-loop-652eb54bd5f8
+    //brilliant explanation of for loops being just like setinterval
+    var i = 0
+
+    function decrement() {
+        counter--;
+        $("#timer").empty()
+        $("#timer").html(counter)
+        if (counter === 0) {
+            counter = 10;
+            $(".killMe").append("<img class='justify-content-center gifYes' src='assets//images/incorrect.gif'>")
+            $(".killMe").append("<h3> Sorry, You have to make a choice! </h3>")
+            incorrect++;
+            clearInterval(intervalId);
+            // setTimeout(start, 5000);
+            
         }
+    }
+    function start() {
+        //empty the button.
+        //this is a set interval to run my function every 30 seconds. It's inside function(start)
+        //to make it recursive. The on click starts it,
+        clearInterval(intervalId);
+        intervalId = setInterval(decrement, 1000)
+        $(".killMe").empty();
+        //append the question.
+        $(".killMe").append("<h1>" + mainArray[i].question + "</h1>");
+        for (var j = 0; j < mainArray[i].answers.length; j++) {
+            $(".killMe").append("<p>" + mainArray[i].answers[j] + "</p")
+        }
+        
+        //append all answers of the object's array. use second iterator with for loop inside this timed function.
 
-    //append all answers of the object's array. use second iterator with for loop inside this timed function.
-    
-    $(".tracker").empty()
-    $(".tracker").append("<h3> Correct: " + correct + "</h3>")
-    $(".tracker").append("<h3> Incorrect: " + incorrect + "</h3>")
-    i++
-    //this is a set interval to run my function every 30 seconds. It's inside function(start)
-    //to make it recursive. The on click starts it, 
-    intervalId = setInterval(decrement, 1000)
-}
+        $(".tracker").empty()
+        $(".tracker").append("<h3> Correct: " + correct + "</h3>")
+        $(".tracker").append("<h3> Incorrect: " + incorrect + "</h3>")
 
- //Jorge showed me for Query dyanmic elements, always use document. to find them. 
- // var value = $(this).text refers to the CLICK. In Jquery it knows "this" is an event listener in this case.
-$(document).on("click", "p", function() {
-    var value = $(this).text();
-    console.log(value);
-    clearInterval(intervalId)
-    //i will be comparing var value to my answertruth property. Changed them to strings for easy comparison.
-    //if event.click === mainArray[i].answers[mainArray[i.answerLocation]] {
-    //      userevent = true;
-    //      $(".killMe").empty();
-    //      $(".killMe").append(MY GIF FOR WIN);
-    //      correct ++
-    //      set timeout for 5 sec for start() --no variable needed
+        $(document).on("click", "p", function () {
+            var value = $(this).text();
 
+            // clearInterval(intervalId)
 
-    // }
-    
-    //if event.click !== mainArray[i].answers[mainArray[i.answerLocation]] {
-    //     userevent = true;
-    //      $(".killMe").empty();
-    //      $(".killMe").append("<h1>The correct answer was: " +mainArray[i].answers[mainArray[i.answerLocation]]+ "</h1>" )
-    //      $(".killMe").append(MY GIF FOR LOSS);
-    //      incorrect ++
-    // }
-    
-    //if 
-    //how do i capture interval to see if it reaches 00:00?
-    //interval === 0 {
-        //      $(".killMe").append("<h1>The correct answer was: " +mainArray[i].answers[mainArray[i.answerLocation]]+ "</h1>" )
-    // }
-}) 
+            if (value === mainArray[i].answerTruth) {
+                $("#timer").empty()
+                $(".killMe").empty();
+                console.log("great")
+                $(".killMe").append("<img class='justify-content-center gifYes' src='assets//images/correct.gif'>")
+                $(".killMe").append("<h3> Congrats, you got that one right! </h3>")
+                correct++;
+                clearInterval(intervalId)
+                console.log(i);
 
-$("button").on("click", function(){
-    start();
-});
+            }
+
+            else if (value !== mainArray[i].answerTruth) {
+                $("#timer").empty()
+                $(".killMe").empty();
+                console.log("bad")
+                $(".killMe").append("<img class='justify-content-center gifYes' src='assets//images/incorrect.gif'>")
+                $(".killMe").append("<h3> Sorry, that's not correct! </h3>")
+                incorrect++;
+                clearInterval(intervalId)
+                console.log(i);
+            }
+            i++
+            setTimeout(start, 5000);
+
+            
+
+        });
+
+        //Jorge showed me for Query dyanmic elements, always use document. to find them. 
+        // var value = $(this).text refers to the CLICK. In Jquery it knows "this" is an event listener in this case.
+
+    };
+
+    $("button").on("click", function () {
+        start();
+    });
 
 });
 
