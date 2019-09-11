@@ -7,25 +7,25 @@ var mainArray = [
         question: "What kind of dog is the smallest?",
         answers: ["Chihuahua", "Labrador Retriever", "Beagle", "Husky"],
         //img here,
-        answerLocation: 0
+        answerTruth: "Chihuahua"
     },
     {
         question: "What is the largest type of dog?",
         answers: ["Beagle", "Golden Retriever", "Great Pyranese", "Poodle"],
         //img here,
-        answerLocation: 2  
+        answerTruth: "Great Pyranese"
     },
     {
         question: "Which animal originated in Mexico?",
         answers: ["Maltese", "Chihuahua", "Yorkie", "Great Dane"],
         //img here,
-        answerLocation: 1
+        answerTruth: "Chihuahua"
     },
     {
         question: "Which is my favorite kind of dog?",
         answers: ["Chihuahua", "Cat", "Turtle", "The correct answer is Chihuahua."],
         //img here,
-        answerLocation: 0
+        answerTruth: "Chihuahua"
     }
 ]
 
@@ -37,19 +37,17 @@ var i = 0
 function start() {
     //empty the button.
     var userinput = false;
-    console.log("hello")
-    i = 0;
+    
     $(".killMe").empty();
     //append the question.
     $(".killMe").append("<h1>" + mainArray[i].question + "</h1>");
-    //append all answers of the object's array. use second iterator with for loop inside this timed function.
     for (var j = 0; j < mainArray[i].answers.length; j++) {
-    $(".killMe").append("<p>" + mainArray[i].answers[j] + "</p")
-    }
-    i++;
-    //how do i save key click event key to compare to correct answer? event.click?
+        $(".killMe").append("<p>" + mainArray[i].answers[j] + "</p")
+        }
+
+    //append all answers of the object's array. use second iterator with for loop inside this timed function.
     
-    // $("p").on("click", function() {}) run if logic after this.
+   
     
     //if event.click === mainArray[i].answers[mainArray[i.answerLocation]] {
     //      userevent = true;
@@ -72,11 +70,27 @@ function start() {
     //interval === 0 {
         //      $(".killMe").append("<h1>The correct answer was: " +mainArray[i].answers[mainArray[i.answerLocation]]+ "</h1>" )
     // }
-    
+    $(".tracker").empty()
+    $(".tracker").append("<h3> Correct: " + correct + "</h3>")
+    $(".tracker").append("<h3> Incorrect: " + incorrect + "</h3>")
+    i++
+    //this is a set interval to run my function every 30 seconds. It's inside function(start)
+    //to make it recursive. The on click starts it, 
+    setInterval(start, 5000)
 }
-// setInterval(function, interval)
-//i want to use a setinterval to run start every 30 seconds
-$("button").on("click", start)
+
+ //Jorge showed me for Query dyanmic elements, always use document. to find them. 
+ // var value = $(this).text refers to the CLICK. In Jquery it knows "this" is an event listener in this case.
+$(document).on("click", "p", function() {
+    var value = $(this).text();
+    console.log(value);
+    //i will be comparing var value to my answertruth property. Changed them to strings for easy comparison.
+}) 
+
+$("button").on("click", function(){
+    start();
+});
+
 });
 
 
