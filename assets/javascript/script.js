@@ -1,6 +1,8 @@
 $(document).ready(function() {
 var correct = 0;
 var incorrect = 0;
+let intervalId;
+let counter = 10;
 //reference "34-QuestionGame" classwork for q&a objects inside arrays. No idea how to work an image into it.
 var mainArray = [
     {
@@ -33,6 +35,16 @@ var mainArray = [
 //brilliant explanation of for loops being just like setinterval
 var i = 0
 
+function decrement() {
+    counter --;
+    $("#timer").empty()
+    $("#timer").html(counter)
+    if (counter === 0) {
+        counter = 10;
+        start();
+        clearInterval(intervalId);
+    }
+}
 
 function start() {
     //empty the button.
@@ -47,13 +59,29 @@ function start() {
 
     //append all answers of the object's array. use second iterator with for loop inside this timed function.
     
-   
-    
+    $(".tracker").empty()
+    $(".tracker").append("<h3> Correct: " + correct + "</h3>")
+    $(".tracker").append("<h3> Incorrect: " + incorrect + "</h3>")
+    i++
+    //this is a set interval to run my function every 30 seconds. It's inside function(start)
+    //to make it recursive. The on click starts it, 
+    intervalId = setInterval(decrement, 1000)
+}
+
+ //Jorge showed me for Query dyanmic elements, always use document. to find them. 
+ // var value = $(this).text refers to the CLICK. In Jquery it knows "this" is an event listener in this case.
+$(document).on("click", "p", function() {
+    var value = $(this).text();
+    console.log(value);
+    clearInterval(intervalId)
+    //i will be comparing var value to my answertruth property. Changed them to strings for easy comparison.
     //if event.click === mainArray[i].answers[mainArray[i.answerLocation]] {
     //      userevent = true;
     //      $(".killMe").empty();
     //      $(".killMe").append(MY GIF FOR WIN);
     //      correct ++
+    //      set timeout for 5 sec for start() --no variable needed
+
 
     // }
     
@@ -70,21 +98,6 @@ function start() {
     //interval === 0 {
         //      $(".killMe").append("<h1>The correct answer was: " +mainArray[i].answers[mainArray[i.answerLocation]]+ "</h1>" )
     // }
-    $(".tracker").empty()
-    $(".tracker").append("<h3> Correct: " + correct + "</h3>")
-    $(".tracker").append("<h3> Incorrect: " + incorrect + "</h3>")
-    i++
-    //this is a set interval to run my function every 30 seconds. It's inside function(start)
-    //to make it recursive. The on click starts it, 
-    setInterval(start, 5000)
-}
-
- //Jorge showed me for Query dyanmic elements, always use document. to find them. 
- // var value = $(this).text refers to the CLICK. In Jquery it knows "this" is an event listener in this case.
-$(document).on("click", "p", function() {
-    var value = $(this).text();
-    console.log(value);
-    //i will be comparing var value to my answertruth property. Changed them to strings for easy comparison.
 }) 
 
 $("button").on("click", function(){
@@ -92,6 +105,23 @@ $("button").on("click", function(){
 });
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // I need a start button that initiates my timer. 
