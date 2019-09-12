@@ -4,6 +4,7 @@ $(document).ready(function () {
     let intervalId;
     let counter = 10;
     //reference "34-QuestionGame" classwork for q&a objects inside arrays. No idea how to work an image into it.
+    //7 questions, answers, and true answer.
     var mainArray = [
         {
             question: "What kind of dog is the smallest?",
@@ -24,10 +25,10 @@ $(document).ready(function () {
             answerTruth: "Chihuahua"
         },
         {
-            question: "Which is my favorite kind of dog?",
-            answers: ["Chihuahua", "Cat", "Turtle", "The correct answer is Chihuahua."],
+            question: "What type of animal always stands on two legs?",
+            answers: ["Chicken", "Snake", "Turtle", "None of the above"],
             //img here,
-            answerTruth: "Chihuahua"
+            answerTruth: "Chicken"
         },
         {
             question: "Which is my favorite kind of dog?",
@@ -36,16 +37,16 @@ $(document).ready(function () {
             answerTruth: "Chihuahua"
         },
         {
-            question: "Which is my favorite kind of dog?",
-            answers: ["Chihuahua", "Cat", "Turtle", "The correct answer is Chihuahua."],
+            question: "What sound do dogs make?",
+            answers: ["SQUEEEEEE", "REEEEEE", "AHHHHH", "Woof"],
             //img here,
-            answerTruth: "Chihuahua"
+            answerTruth: "Woof"
         },
         {
-            question: "Which is my favorite kind of dog?",
-            answers: ["Chihuahua", "Cat", "Turtle", "The correct answer is Chihuahua."],
+            question: "Which animal is known as the puppy of the sea?",
+            answers: ["Lobster", "Narwhal", "Dolphin", "Manitee"],
             //img here,
-            answerTruth: "Chihuahua"
+            answerTruth: "Manitee"
         },
 
     ]
@@ -60,121 +61,93 @@ $(document).ready(function () {
         $("#timer").empty()
         $("#timer").html(counter)
         if (counter === 0) {
-            counter = 10;
-            $(".killMe").append("<img class='justify-content-center gifYes' src='assets//images/incorrect.gif'>")
+            $(".killMe").empty();
+            $(".killMe").append("<img class='gifYes' src='assets//images/incorrect.gif'>")
             $(".killMe").append("<h3> Sorry, You have to make a choice! </h3>")
+            $(".killMe").append("<h3 class='text-center'>The correct answer was: " + mainArray[i-1].answerTruth + "</h3>")
             incorrect++;
             clearInterval(intervalId);
+            appendStats();
+            counter = 10;
             // setTimeout(start, 5000);
             
         }
     }
-    function start() {
-        //empty the button.
-        //this is a set interval to run my function every 30 seconds. It's inside function(start)
-        //to make it recursive. The on click starts it,
-        clearInterval(intervalId);
-        intervalId = setInterval(decrement, 1000)
+    //I made a separate function to append my questions and answers so that my loop is not dependent or changed by my main game logic.
+    //recursion was ruining my iterators.
+    function appendQA() {
         $(".killMe").empty();
         //append the question.
         $(".killMe").append("<h1>" + mainArray[i].question + "</h1>");
+        //append all answers of the object's array. use second iterator with for loop inside this timed function.
         for (var j = 0; j < mainArray[i].answers.length; j++) {
             $(".killMe").append("<p>" + mainArray[i].answers[j] + "</p")
-        }
-        
-        //append all answers of the object's array. use second iterator with for loop inside this timed function.
-
+        }  
+        i++;
+    }
+    //this is my function to append the correct and incorrect values after each click.
+    function appendStats() {
         $(".tracker").empty()
         $(".tracker").append("<h3> Correct: " + correct + "</h3>")
         $(".tracker").append("<h3> Incorrect: " + incorrect + "</h3>")
+        }
+
+    
+    function start() {
+        
+        //empty the button.
+        //this is a set interval to run my decrement timer function every second. with Jorge's help, it's inside function(start)
+        //to make it recursive. The on click starts it, and the if/else logic brings it back to start()
+        clearInterval(intervalId);
+        intervalId = setInterval(decrement, 1000)
+        appendQA()
+        //every time the function gets called, empty my correct and incorrect div, and append them updated.
+        
 
         $(document).on("click", "p", function () {
+            // var value = $(this).text refers to the CLICK. In Jquery it knows "this" is an event listener in this case.
             var value = $(this).text();
 
             // clearInterval(intervalId)
 
-            if (value === mainArray[i].answerTruth) {
+            if (value === mainArray[i-1].answerTruth) {
                 $("#timer").empty()
                 $(".killMe").empty();
                 console.log("great")
-                $(".killMe").append("<img class='justify-content-center gifYes' src='assets//images/correct.gif'>")
-                $(".killMe").append("<h3> Congrats, you got that one right! </h3>")
+                $(".killMe").append("<img class='gifYes' src='assets//images/correct.gif'>")
+                $(".killMe").append("<h3 class='text-center'> Congrats, you got that one right! </h3>")
                 correct++;
+                appendStats();
                 clearInterval(intervalId)
                 console.log(i);
+                setTimeout(appendQA, 3000)
 
             }
 
-            else if (value !== mainArray[i].answerTruth) {
+            else if (value !== mainArray[i-1].answerTruth) {
                 $("#timer").empty()
                 $(".killMe").empty();
                 console.log("bad")
-                $(".killMe").append("<img class='justify-content-center gifYes' src='assets//images/incorrect.gif'>")
-                $(".killMe").append("<h3> Sorry, that's not correct! </h3>")
+                $(".killMe").append("<img class='gifYes' src='assets//images/incorrect.gif'>")
+                $(".killMe").append("<h3 class='text-center'> Sorry, that's not correct! </h3>")
+                $(".killMe").append("<h3 class='text-center'>The correct answer was: " + mainArray[i-1].answerTruth + "</h3>")
                 incorrect++;
+                appendStats()
                 clearInterval(intervalId)
                 console.log(i);
+                setTimeout(appendQA, 3000)
             }
-            i++
-            setTimeout(start, 5000);
-
             
 
         });
 
-        //Jorge showed me for Query dyanmic elements, always use document. to find them. 
-        // var value = $(this).text refers to the CLICK. In Jquery it knows "this" is an event listener in this case.
+        //To query dyanmic elements, always use document.element to find them. 
+        
 
     };
 
     $("button").on("click", function () {
-        start();
+        start()
     });
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// I need a start button that initiates my timer. 
-//reference classwork "10-Stopwatch" and "08-SimpleTimer"
-//setTimeout(function(){ alert("Hello"); }, 3000);
-
-//do i need to wrap my entire code in the timeout?
-
-//loop through my array of question and answer objects.
-
-//for (var i = 0; if i < mainArray.length; i++) {}
-
-//append questions to the page
-    //$("parentelement").append("what-im-appending")
-//append image below question
-//append answers to the page, they function like buttons. maybe use all <p> tags as buttons.
-    //$("p").on("click", answerFunction)
-
-//if else's?
-//↓ ↓ ↓ ↓ ↓ ↓
-//maybe set answered to "false" before click, and on click set it to "True", for the timeout part below.
-//event timer. in 15 seconds and nothing clicked, show "times up", show correct answer, wait 3secs, append next set.
-//if correct, append funny doge .gif to page, timer for a few seconds, append next set iterate correct variable
-//if incorrect, append sad doge.gif to page, timer for a few seconds, append next set. iterate incorrect variable.
-// ↑ ↑ ↑ ↑ ↑
-//if else's?
-
-//at the end of the quiz, show the number of correct answers, incorrect, show percentage, and button to restart.
-//whooooo boy, lots of jquery going on here. 
