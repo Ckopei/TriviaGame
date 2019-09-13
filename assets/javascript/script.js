@@ -4,6 +4,7 @@ $(document).ready(function () {
     let intervalId;
     let counter = 10;
     let questionsAsked = 0;
+    var i = 0
     //reference "34-QuestionGame" classwork for q&a objects inside arrays. No idea how to work an image into it.
     //7 questions, answers, and true answer.
     var mainArray = [
@@ -51,12 +52,7 @@ $(document).ready(function () {
         },
 
     ]
-
-
-    //https://medium.com/@eric.stermer/setinterval-simply-put-is-a-timed-loop-652eb54bd5f8
-    //brilliant explanation of for loops being just like setinterval
-    var i = 0
-
+    
     function decrement() {
         counter--;
         $(".time").empty()
@@ -80,12 +76,24 @@ $(document).ready(function () {
     function reset() {
 
         $(".tracker").empty()
-
         clearInterval(intervalId)
+
         if (questionsAsked < mainArray.length) {
             appendQA()
         }
 
+        else {
+            clearInterval(intervalId)
+            $("#timer").empty()
+            $(".killMe").empty();
+            $(".killMe").append("<img class='gifYes' src='assets//images/finished.jpg'>")
+            $(".killMe").append("<h3 class='text-center'> You finished the quiz! </h3>")
+            //until i ask about getting my correct and incorrect vars to restart on the restart, this wont
+            // var totalScore = (correct/mainArray-1)*100
+            // $(".killMe").append("<h3 class='text-center'> Your score was: " + totalScore + "%! </h3>" )
+            $(".killMe").append("<button type='button' class='restart btn btn-danger'>Press me to restart!</button>")
+
+        }
 
         function appendQA() {
             i++
@@ -98,19 +106,7 @@ $(document).ready(function () {
             for (var j = 0; j < mainArray[i - 1].answers.length; j++) {
                 $(".killMe").append("<p>" + mainArray[i - 1].answers[j] + "</p")
             }
-            questionsAsked++;
-            if (questionsAsked === mainArray.length) {
-                clearInterval(intervalId)
-                $("#timer").empty()
-                $(".killMe").empty();
-                $(".killMe").append("<img class='gifYes' src='assets//images/finished.jpg'>")
-                $(".killMe").append("<h3 class='text-center'> You finished the quiz! </h3>")
-                var totalScore = (correct/incorrect)*100
-                $(".killMe").append("<h3 class='text-center'> Your score was: " + totalScore + "%! </h3>" )
-                $(".killMe").append("<button type='button' class='restart btn btn-danger'>Press me to restart!</button>")
-
-            }
-
+            questionsAsked++;  
         }
     }
 
@@ -126,6 +122,7 @@ $(document).ready(function () {
 
         //empty the button.
         $(".killMe").empty()
+        $(".tracker").empty()
         //this is a set interval to run my decrement timer function every second. with Jorge's help, it's inside function(start)
         //to make it recursive. The on click starts it, and the if/else logic brings it back to start()
         clearInterval(intervalId);
@@ -165,10 +162,9 @@ $(document).ready(function () {
             $(".killMe").append("<img class='gifYes' src='assets//images/correct.gif'>")
             $(".killMe").append("<h3 class='text-center'> Congrats, you got that one right! </h3>")
             correct++;
-            appendStats();
+            // appendStats();
             clearInterval(intervalId)
             $(".time").empty()
-
             console.log(i);
             setTimeout(reset, 3000)
 
@@ -182,7 +178,7 @@ $(document).ready(function () {
             $(".killMe").append("<h3 class='text-center'> Sorry, that's not correct! </h3>")
             $(".killMe").append("<h3 class='text-center'>The correct answer was: " + mainArray[i - 1].answerTruth + "</h3>")
             incorrect++;
-            appendStats()
+            // appendStats()
             clearInterval(intervalId)
             $(".time").empty()
             console.log(i);
