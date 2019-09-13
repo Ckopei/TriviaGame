@@ -105,6 +105,8 @@ $(document).ready(function () {
                 $(".killMe").empty();
                 $(".killMe").append("<img class='gifYes' src='assets//images/finished.jpg'>")
                 $(".killMe").append("<h3 class='text-center'> You finished the quiz! </h3>")
+                var totalScore = (correct/incorrect)*100
+                $(".killMe").append("<h3 class='text-center'> Your score was: " + totalScore + "%! </h3>" )
                 $(".killMe").append("<button type='button' class='restart btn btn-danger'>Press me to restart!</button>")
 
             }
