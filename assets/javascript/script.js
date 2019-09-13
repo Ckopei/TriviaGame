@@ -74,7 +74,7 @@ $(document).ready(function () {
     //I made a separate function to append my questions and answers so that my loop is not dependent or changed by my main game logic.
     //recursion was ruining my iterators.
     function reset() {
-
+        
         $(".tracker").empty()
         clearInterval(intervalId)
 
@@ -89,8 +89,8 @@ $(document).ready(function () {
             $(".killMe").append("<img class='gifYes' src='assets//images/finished.jpg'>")
             $(".killMe").append("<h3 class='text-center'> You finished the quiz! </h3>")
             //until i ask about getting my correct and incorrect vars to restart on the restart, this wont
-            // var totalScore = (correct/mainArray-1)*100
-            // $(".killMe").append("<h3 class='text-center'> Your score was: " + totalScore + "%! </h3>" )
+            var totalScore = Math.floor((correct/questionsAsked)*100)
+            $(".killMe").append("<h3 class='text-center'> Your score was: " + totalScore + "%! </h3>" )
             $(".killMe").append("<button type='button' class='restart btn btn-danger'>Press me to restart!</button>")
 
         }
@@ -106,7 +106,7 @@ $(document).ready(function () {
             for (var j = 0; j < mainArray[i - 1].answers.length; j++) {
                 $(".killMe").append("<p>" + mainArray[i - 1].answers[j] + "</p")
             }
-            questionsAsked++;  
+            questionsAsked++; 
         }
     }
 
@@ -127,8 +127,8 @@ $(document).ready(function () {
         //to make it recursive. The on click starts it, and the if/else logic brings it back to start()
         clearInterval(intervalId);
         i = 0
-        correctAnswers = 0;
-        incorrectAnswers = 0;
+        correct = 0;
+        incorrect = 0;
         questionsAsked = 0;
         reset()
         //To query dyanmic elements, always use document.element to find them. 
