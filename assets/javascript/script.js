@@ -74,37 +74,21 @@ $(document).ready(function () {
 
         }
     }
+
     //I made a separate function to append my questions and answers so that my loop is not dependent or changed by my main game logic.
     //recursion was ruining my iterators.
     function reset() {
 
         $(".tracker").empty()
-        i++
+
         clearInterval(intervalId)
         if (questionsAsked < mainArray.length) {
             appendQA()
         }
-        else {
-            $("#timer").empty()
-            $(".killMe").empty();
-            $(".killMe").append("<img class='gifYes' src='assets//images/finished.jpg'>")
-            $(".killMe").append("<h3 class='text-center'> You finished the quiz! </h3>")
-            $(".killMe").append("<button type='button' class='btn btn-danger'>Press me to restart!</button>")
-            correctAnswers = 0;
-            incorrectAnswers = 0;
-            unansweredQuestions = 0;
-            i = 0
-            setTimeout(appendQA, 2000)
-            // $("button").on("click", function () {
-            //     correctAnswers = 0;
-            //     incorrectAnswers = 0;
-            //     unansweredQuestions = 0;
-            //     i = 0;
-            //     reset()
-            // });
-        }
+
 
         function appendQA() {
+            i++
             counter = 10
             intervalId = setInterval(decrement, 1000)
             $(".killMe").empty();
@@ -115,6 +99,16 @@ $(document).ready(function () {
                 $(".killMe").append("<p>" + mainArray[i - 1].answers[j] + "</p")
             }
             questionsAsked++;
+            if (questionsAsked === mainArray.length) {
+                clearInterval(intervalId)
+                $("#timer").empty()
+                $(".killMe").empty();
+                $(".killMe").append("<img class='gifYes' src='assets//images/finished.jpg'>")
+                $(".killMe").append("<h3 class='text-center'> You finished the quiz! </h3>")
+                $(".killMe").append("<button type='button' class='restart btn btn-danger'>Press me to restart!</button>")
+
+            }
+
         }
     }
 
@@ -129,61 +123,71 @@ $(document).ready(function () {
     function start() {
 
         //empty the button.
+        $(".killMe").empty()
         //this is a set interval to run my decrement timer function every second. with Jorge's help, it's inside function(start)
         //to make it recursive. The on click starts it, and the if/else logic brings it back to start()
         clearInterval(intervalId);
-
+        i = 0
+        correctAnswers = 0;
+        incorrectAnswers = 0;
+        questionsAsked = 0;
         reset()
-        //every time the function gets called, empty my correct and incorrect div, and append them updated.
-
-
-        $(document).on("click", "p", function () {
-            // var value = $(this).text refers to the CLICK. In Jquery it knows "this" is an event listener in this case.
-            var value = $(this).text();
-
-            // clearInterval(intervalId)
-
-            if (value === mainArray[i - 1].answerTruth) {
-                $("#timer").empty()
-                $(".killMe").empty();
-                console.log("great")
-                $(".killMe").append("<img class='gifYes' src='assets//images/correct.gif'>")
-                $(".killMe").append("<h3 class='text-center'> Congrats, you got that one right! </h3>")
-                correct++;
-                appendStats();
-                clearInterval(intervalId)
-                $(".time").empty()
-
-                console.log(i);
-                setTimeout(reset, 3000)
-
-            }
-
-            else if (value !== mainArray[i - 1].answerTruth) {
-                $("#timer").empty()
-                $(".killMe").empty();
-                console.log("bad")
-                $(".killMe").append("<img class='gifYes' src='assets//images/incorrect.gif'>")
-                $(".killMe").append("<h3 class='text-center'> Sorry, that's not correct! </h3>")
-                $(".killMe").append("<h3 class='text-center'>The correct answer was: " + mainArray[i - 1].answerTruth + "</h3>")
-                incorrect++;
-                appendStats()
-                clearInterval(intervalId)
-                $(".time").empty()
-                console.log(i);
-                setTimeout(reset, 3000)
-            }
-
-        });
-
         //To query dyanmic elements, always use document.element to find them. 
 
 
     };
+    $(document).on("click", ".restart", function () {
+        i = 0
+        clearInterval(intervalId)
+        correctAnswers = 0;
+        incorrectAnswers = 0;
+        unansweredQuestions = 0;
+        start()
+    })
 
     $("button").on("click", function () {
 
         start()
+    });
+
+    $(document).on("click", "p", function () {
+        // var value = $(this).text refers to the CLICK. In Jquery it knows "this" is an event listener in this case.
+        var value = $(this).text();
+
+        // clearInterval(intervalId)
+
+        if (value === mainArray[i - 1].answerTruth) {
+            $("#timer").empty()
+            $(".killMe").empty();
+            console.log("great")
+            $(".killMe").append("<img class='gifYes' src='assets//images/correct.gif'>")
+            $(".killMe").append("<h3 class='text-center'> Congrats, you got that one right! </h3>")
+            correct++;
+            appendStats();
+            clearInterval(intervalId)
+            $(".time").empty()
+
+            console.log(i);
+            setTimeout(reset, 3000)
+
+        }
+
+        else if (value !== mainArray[i - 1].answerTruth) {
+            $("#timer").empty()
+            $(".killMe").empty();
+            console.log("bad")
+            $(".killMe").append("<img class='gifYes' src='assets//images/incorrect.gif'>")
+            $(".killMe").append("<h3 class='text-center'> Sorry, that's not correct! </h3>")
+            $(".killMe").append("<h3 class='text-center'>The correct answer was: " + mainArray[i - 1].answerTruth + "</h3>")
+            incorrect++;
+            appendStats()
+            clearInterval(intervalId)
+            $(".time").empty()
+            console.log(i);
+            setTimeout(reset, 3000)
+        }
+
+
     });
 
 });
